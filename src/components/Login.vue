@@ -4,7 +4,7 @@
       <source src="../assets/mp4/Login.mp4" />
     </video>
     <div class="container" id="container">
-      <div class="form-container sign-up-container">
+      <!-- <div class="form-container sign-up-container">
         <form action="#">
           <h1>☞第三方按钮注册</h1>
           <div class="social-container">
@@ -24,11 +24,11 @@
           <input type="password" placeholder="密 码" />
           <button>注册</button>
         </form>
-      </div>
+      </div> -->
       <div class="form-container sign-in-container">
         <form action="#">
-          <h1>第三方登录♫</h1>
-          <div class="social-container">
+          <h1>Admin登录♫</h1>
+          <!-- <div class="social-container">
             <a href="#" class="social">
               <ion-icon name="logo-facebook"></ion-icon>
             </a>
@@ -38,8 +38,7 @@
             <a href="#" class="social">
               <ion-icon name="logo-linkedin"></ion-icon>
             </a>
-          </div>
-          <span>或用用户名登录</span>
+          </div> -->
           <input
             type="username"
             placeholder="用户名"
@@ -62,10 +61,10 @@
           </div>
           <div class="overlay-panel overlay-right">
             <h1>欢迎光临☺</h1>
-            <p>输入您的个人资料，并与我们一起开始旅程吧~</p>
-            <button class="ghost" id="signUp" ref="signUp" @click="addTodo">
+            <p>输入您的账号，并与我们一起开始旅程吧~</p>
+            <!-- <button class="ghost" id="signUp" ref="signUp" @click="addTodo">
               注册
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -92,7 +91,7 @@ export default {
     async Login() {
       // 获取到数据
       const res = await this.$http.post(
-        "/ListNoticeServlet",
+        "/LoginServlet",
         this.loginForm
       );
       console.log(res);
