@@ -1,4 +1,4 @@
-# demo
+# blogproject-vue-new
 
 ## Project setup
 ```
