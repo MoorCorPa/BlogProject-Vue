@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: './',//默认的'/'是绝对路径，如果不确定在根路径，改成相对路径'./'
+  publicPath: '/',//默认的'/'是绝对路径，如果不确定在根路径，改成相对路径'./'
   devServer: {
     proxy: {  //配置跨域
       '/api': {

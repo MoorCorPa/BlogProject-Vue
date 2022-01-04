@@ -2,7 +2,6 @@
 import Vue from "vue"
 import VueRouter from 'vue-router'
 import Login from '../src/components/Login.vue'
-import home from '../src/components/home.vue'
 // import Home from '../view/Home.vue'
 
 
@@ -11,12 +10,18 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        alias:'/Login',
+        alias:'/login',
         component: Login
     },
     {
-        path: '/home',
-        component: home
+        path: '/login',
+        name: 'login',
+        component: () => import('@/components/Login.vue')
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('@/components/Manager.vue')
     }
     // {
     //     path:'/home',

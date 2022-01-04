@@ -12,7 +12,7 @@ video{position: fixed;
     height: auto;          
     z-index: -9999; 
 }
-.eihh {
+.login {
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
