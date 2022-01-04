@@ -28,14 +28,6 @@ const http = axios.create({
 });
 Vue.prototype.$http = http;
 
-
-//创建vm
-// new Vue({
-// 	el: '#app',
-// 	render: h => h(App)
-// })
-
-
 //全局注册
 Vue.use(ElementUI);
 new Vue({

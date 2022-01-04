@@ -94,33 +94,29 @@ export default {
         "/LoginServlet",
         this.loginForm
       );
-      console.log(res);
-      console.log(this.loginForm.username,this.loginForm.password);
-      this.$router.push("/home");
-      if (res.meta.status != 200) {
-        return this.$message.error("登入失败" + res.meta.msg);
-      }else{
-        this.$message.success("登入成功");
+
+      if (res.data.msg == "登录成功") {
+        // this.$message.success("登入成功");
         // window.sessionStorage.setItem("token", res.data.token);
         this.$router.push("/home");
+      }else{
+        // return this.$message.error("登入失败" + res.data.msg);
       }
     },
 
-    
-
-    // 注册想数据库提交 用户和密码
-    addTodo() {
-      this.$http
-        .post("/AddBituceServlet", { title: this.loginForm.username, details: this.loginForm.password })
-        .then((response) => {
-          if (response.data.status == 200) {
-            this.Login();
-          }
-        })
-        .catch((error) => {
-          console.log("添加失败", error.message);
-        });
-    },
+    // // 注册想数据库提交 用户和密码
+    // addTodo() {
+    //   this.$http
+    //     .post("/AddBituceServlet", { title: this.loginForm.username, details: this.loginForm.password })
+    //     .then((response) => {
+    //       if (response.data.status == 200) {
+    //         this.Login();
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log("添加失败", error.message);
+    //     });
+    // },
   },
 };
 </script>

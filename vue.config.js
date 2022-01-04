@@ -1,7 +1,6 @@
 module.exports = {
   publicPath: './',//默认的'/'是绝对路径，如果不确定在根路径，改成相对路径'./'
   devServer: {
-    port:8081,
     proxy: {  //配置跨域
       '/api': {
         target: 'http://localhost:8081/blog/',  //这里后台的地址模拟的;应该填写你们真实的后台接口
