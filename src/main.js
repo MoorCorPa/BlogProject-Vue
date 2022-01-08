@@ -1,7 +1,10 @@
+import '@babel/polyfill'
+import 'mutationobserver-shim'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import './plugins/ant-design-vue.js'
 import './plugins/element.js'
 
 Vue.config.productionTip = false
