@@ -27,13 +27,12 @@
     </el-menu>
 
     <a-layout-content style="padding: 0 50px">
-      <el-breadcrumb separator-class="el-icon-arrow-right" style="margin: 16px 0">
-
-      </el-breadcrumb>
+      <el-breadcrumb separator-class="el-icon-arrow-right" style="margin: 16px 0"></el-breadcrumb>
       <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
         <router-view/>
       </div>
     </a-layout-content>
+
     <a-layout-footer style="text-align: center"> 博客系统 </a-layout-footer>
   </a-layout>
 </template>
