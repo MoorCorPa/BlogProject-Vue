@@ -20,6 +20,11 @@ const routes = [
         path: '/write',
         name: 'write',
         component: () => import('@/components/admin/Write')
+      },
+      {
+        path: '/mArticle',
+        name: 'mArticle',
+        component: () => import('@/components/admin/mArticle')
       }
     ]
   }

@@ -44,7 +44,7 @@
 
         <div style="margin-top: 350px">
           <a-button type="primary" block>
-                Primary
+                发布
           </a-button>
         </div>
         <!-- <div style="position: fixed; right: 150px; bottom: 150px;">

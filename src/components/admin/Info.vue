@@ -27,6 +27,9 @@
             <el-table-column prop="date" label="日期" width="180">
             </el-table-column>
             <el-table-column prop="aname" label="文章" width="180">
+              <template slot-scope="scope">
+                <a :href="q">{{scope.row.aname}}</a>
+              </template>
             </el-table-column>
           </el-table>
         </a-col>
