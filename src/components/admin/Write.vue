@@ -30,8 +30,8 @@
               <el-option
                 v-for="item in categorys"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :label="item.category_name"
+                :value="item.category_id"
               >
               </el-option>
             </el-select>
@@ -43,9 +43,7 @@
         </div>
 
         <div style="margin-top: 350px">
-          <a-button type="primary" block>
-                发布
-          </a-button>
+          <a-button type="primary" block @click="getcategorys()"> 发布 </a-button>
         </div>
         <!-- <div style="position: fixed; right: 150px; bottom: 150px;">
           <a-button type="primary" block>
@@ -72,23 +70,36 @@ export default {
       title: '',
       context: '',
       label: '',
-      category: '',
-      categorys: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        }
-      ]
+      category: '未分类',
+      categorys: [],
+      params: {}
     }
   },
-  methods: {}
+  mounted: function () {
+    this.getcategorys()
+  },
+  methods: {
+    sendAData () {
+      this.setData()
+      this.$http.post('/admin/AddArticleServlet', this.params).then((res) => {
+        console.log(res)
+      })
+    },
+    getcategorys () {
+      this.$http.get('/admin/FindAllCategoryServlet').then((res) => {
+        for (var i in res.data) {
+          if (i >= 3) {
+            break
+          }
+          this.categorys.push(res.data[i])
+        }
+      })
+    },
+    setData () {
+      this.params.title = this.title
+      this.params.content = this.context
+      this.params.category = this.category
+    }
+  }
 }
 </script>
