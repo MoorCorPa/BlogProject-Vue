@@ -9,7 +9,7 @@
           style="margin: 0 0 30px 0"
         ></el-input>
         <div class="markdown">
-          <Markdown v-model="context" />
+          <Markdown v-model="content" />
         </div>
       </el-col>
       <el-col :span="5">
@@ -43,7 +43,7 @@
         </div>
 
         <div style="margin-top: 350px">
-          <a-button type="primary" block @click="getcategorys()"> 发布 </a-button>
+          <a-button type="primary" block @click="sendAData()"> 发布 </a-button>
         </div>
         <!-- <div style="position: fixed; right: 150px; bottom: 150px;">
           <a-button type="primary" block>
@@ -68,7 +68,7 @@ export default {
     return {
       dateVal: date.getTime(),
       title: '',
-      context: '',
+      content: '',
       label: '',
       category: '未分类',
       categorys: [],
@@ -81,9 +81,11 @@ export default {
   methods: {
     sendAData () {
       this.setData()
-      this.$http.post('/admin/AddArticleServlet', this.params).then((res) => {
-        console.log(res)
-      })
+      console.log(this.params)
+      this.$http.post('/admin/AddArticleServlet', this.$qs.stringify(this.params))
+        .then((res) => {
+          console.log(res)
+        })
     },
     getcategorys () {
       this.$http.get('/admin/FindAllCategoryServlet').then((res) => {
@@ -92,13 +94,14 @@ export default {
             break
           }
           this.categorys.push(res.data[i])
+          console.log(this.categorys[0].category_id)
         }
       })
     },
     setData () {
       this.params.title = this.title
-      this.params.content = this.context
-      this.params.category = this.category
+      this.params.content = this.content
+      this.params.category = 0
     }
   }
 }
