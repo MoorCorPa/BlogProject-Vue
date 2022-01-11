@@ -30,7 +30,7 @@
             </el-table-column>
             <el-table-column label="文章" width="180">
               <template slot-scope="scope">
-                <a :href="null">{{ scope.row.content }}</a>
+                <a :href="null">{{ scope.row.title }}</a>
               </template>
             </el-table-column>
           </el-table>
@@ -59,19 +59,8 @@ export default {
       aCount: 0,
       cCount: 0,
       cateCount: 0,
-      aTableData: [
-        {
-          createDate: '09-19',
-          content: 'java'
-        }
-      ],
-      cTableData: [
-        {
-          commentDate: '09-19',
-          commentator: 'yousa',
-          commentContent: '甘露！'
-        }
-      ]
+      aTableData: [],
+      cTableData: []
     }
   },
   mounted: function () {

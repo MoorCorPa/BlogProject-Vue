@@ -25,6 +25,11 @@ const routes = [
         path: '/mArticle',
         name: 'mArticle',
         component: () => import('@/components/admin/mArticle')
+      },
+      {
+        path: '/eArticle',
+        name: 'eArticle',
+        component: () => import('@/components/admin/eArticle')
       }
     ]
   }

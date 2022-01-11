@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>撰写新文章</h1>
+    <h1>编辑文章</h1>
     <el-row :gutter="20">
       <el-col :span="19">
         <el-input
@@ -15,18 +15,17 @@
       <el-col :span="5">
         <div class="block">
           <p class="demonstration">发布日期</p>
-          <el-date-picker
-            v-model="dateVal"
-            type="datetime"
-            readonly
-            placeholder="选择日期时间"
-          >
+          <el-date-picker v-model="dateVal" type="datetime" readonly>
           </el-date-picker>
         </div>
         <div style="margin-top: 30px">
           <p>分类</p>
           <div>
-            <el-select v-model="category" placeholder="请选择" @change="indexSelect($event)">
+            <el-select
+              v-model="category"
+              placeholder="请选择"
+              @change="indexSelect($event)"
+            >
               <el-option
                 v-for="item in categorys"
                 :key="item.value"
@@ -72,16 +71,35 @@ export default {
       label: '',
       category: '',
       categorys: [],
-      params: {}
+      params: {},
+      aid: -1
     }
   },
   mounted: function () {
     this.getcategorys()
+    this.queryArticleById()
   },
   methods: {
+    queryArticleById () {
+      this.aid = this.$route.query.aid
+      if (this.aid === -1) {
+        this.$notify.error({
+          title: '错误',
+          message: '文章获取失败'
+        })
+        return
+      }
+      this.$http.post('/FindArticleByIdServlet', this.$qs.stringify({ aid: this.aid }))
+        .then((res) => {
+          console.log(res.data)
+          this.title = res.data[0].title
+          this.content = res.data[0].content
+        })
+    },
     sendAData () {
-      this.setData()
-      this.$http.post('/admin/AddArticleServlet', this.$qs.stringify(this.params))
+      this.setParams()
+      this.$http
+        .post('/admin/UpdateArticleServlet', this.$qs.stringify(this.params))
         .then((res) => {
           if (res.data.status === 200) {
             this.$notify({
@@ -89,6 +107,7 @@ export default {
               message: res.data.msg,
               type: 'success'
             })
+            this.$router.push('/mArticle')
           }
         })
     },
@@ -99,9 +118,10 @@ export default {
         }
       })
     },
-    setData () {
+    setParams () {
       this.params.title = this.title
       this.params.content = this.content
+      this.params.aid = this.aid
     },
     indexSelect (e) {
       this.params.category = this.categorys[e].category_id

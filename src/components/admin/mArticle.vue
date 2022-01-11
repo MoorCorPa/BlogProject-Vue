@@ -7,19 +7,23 @@
       </el-col>
       <el-col :span="8">
         <div>
-        <el-row type="flex" class="row-bg" justify="end">
-          <el-input v-model="input" placeholder="请输入关键字"></el-input>
-          <el-select v-model="value" placeholder="所有分类">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+          <el-row type="flex" class="row-bg" justify="end">
+            <el-input v-model="input" placeholder="请输入关键字"></el-input>
+            <el-select
+              v-model="value"
+              placeholder="请选择分类"
+              @select="setCategory"
             >
-            </el-option>
-          </el-select>
-           <el-button type="primary">我是按钮</el-button>
-        </el-row>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.category_name"
+                :value="item.category_id"
+              >
+              </el-option>
+            </el-select>
+            <el-button type="primary" @click="search()">查询</el-button>
+          </el-row>
         </div>
       </el-col>
     </el-row>
@@ -35,9 +39,9 @@
       >
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column width="120">
-            <template slot-scope="scope">
-                <el-tag :type="info">{{scope.row.cCount}}</el-tag>
-            </template>
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.cCount }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column label="标题" width="700">
           <template slot-scope="scope">
@@ -46,28 +50,28 @@
         </el-table-column>
         <el-table-column label="作者" width="200">
           <template slot-scope="scope">
-            <a href="">{{ scope.row.name }}</a>
+            <a href="">{{ scope.row.author }}</a>
           </template>
         </el-table-column>
         <el-table-column label="分类" width="200">
           <template slot-scope="scope">
-            <a href="">{{ scope.row.category }}</a>
+            <a href="">{{ scope.row.category_name }}</a>
           </template>
         </el-table-column>
         <el-table-column label="日期" width="200" show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template slot-scope="scope">{{ scope.row.createDate }}</template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="editRow(scope.$index, tableData)"
+              @click.native="toEdit(scope.$index)"
               type="text"
               size="small"
             >
               编辑
             </el-button>
             <el-button
-              @click.native.prevent="deleteRow(scope.$index, tableData)"
+              @click.native="deleteData(scope.$index)"
               type="text"
               size="small"
             >
@@ -85,50 +89,31 @@ export default {
   data () {
     return {
       input: '',
-      tableData: [
-        {
-          title: 'java21天从入门到放弃',
-          cCount: 12,
-          date: '2016-05-03',
-          name: '王小虎',
-          category: '书籍'
-        },
-        {
-          title: '论小组作孽的二十一种方式',
-          cCount: 12,
-          date: '2016-05-02',
-          name: '王小虎',
-          category: '书籍'
-        },
-        {
-          title: '摸鱼的一百种方法',
-          cCount: 12,
-          date: '2016-05-04',
-          name: 'LingD',
-          category: '书籍'
-        }
-      ],
+      tableData: [],
       multipleSelection: [],
-      options: [
-        {
-          value: '选项1',
-          label: '书籍'
-        },
-        {
-          value: '选项2',
-          label: '课程'
-        },
-        {
-          value: '选项3',
-          label: '网课'
-        }
-      ],
-      value: ''
+      options: [],
+      value: '',
+      params: {},
+      aid: 0
     }
+  },
+  mounted: function () {
+    this.getcategorys()
+    this.getData()
   },
   methods: {
     toWrite () {
       this.$router.push('/write')
+    },
+    toEdit (e) {
+      this.aid = this.tableData[e].id
+      console.log(this.aid)
+      this.$router.push({
+        path: '/eArticle',
+        query: {
+          aid: this.aid
+        }
+      })
     },
     toggleSelection (rows) {
       if (rows) {
@@ -141,6 +126,55 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    getData () {
+      this.$http.get('/FindAllArticleServlet').then((res) => {
+        this.tableData = res.data
+      })
+    },
+    getcategorys () {
+      this.$http.get('/admin/FindAllCategoryServlet').then((res) => {
+        this.options.push({ category_name: '所有分类' })
+        for (var i in res.data) {
+          this.options.push(res.data[i])
+        }
+      })
+    },
+    search () {
+      if (this.options[this.value].category_name === '所有分类') {
+        this.getData()
+        return
+      }
+      this.setData()
+      this.$http
+        .post('/FindArticleServletOne', this.$qs.stringify(this.params))
+        .then((res) => {
+          this.tableData = []
+          this.tableData = res.data
+          // this.tableData.push(res.data)
+        })
+    },
+    setData () {
+      this.params.title = this.input
+      // this.params.category = this.options[this.value].category_name
+    },
+    setCategory () {
+      this.params.category = this.options[this.value].category_name
+    },
+    deleteData (e) {
+      this.aid = this.tableData[e].id
+      this.$http
+        .post('/admin/DelArticleServlet', this.$qs.stringify({ id: this.aid }))
+        .then((res) => {
+          if (res.data.status === 200) {
+            this.$notify({
+              title: '删除成功',
+              message: res.data.msg,
+              type: 'success'
+            })
+          }
+          this.getData()
+        })
     }
   }
 }
