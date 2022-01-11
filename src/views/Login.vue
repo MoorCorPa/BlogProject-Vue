@@ -1,18 +1,41 @@
 <template>
-  <div class="login_container">
-    <!-- 登录盒子  -->
-    <div class="login_box">
-      <!-- 头像 -->
+  <div class="backclout">
+    <div class="backclout">
+      <el-form
+        ref="loginForm"
+        :model="form"
+        :rules="rules"
+        label-width="80px"
+        class="login-box"
+      >
+        <h3 class="login-title">欢迎登录</h3>
+        <el-form-item label="账号: " prop="username">
+          <el-input
+            type="text"
+            placeholder="请输入账号"
+            v-model="loginForm.username"
+          />
+        </el-form-item>
+        <el-form-item label="密码: " prop="password">
+          <el-input
+            type="password"
+            placeholder="请输入密码"
+            v-model="loginForm.password"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <!-- <div class="login_box">
       <div class="avatar_box">
         <img src="../assets/logo.png" alt />
       </div>
-      <!-- 登录表单 -->
       <el-form :model="loginForm" ref="LoginFormRef" label-width="0px" class="login_form">
-        <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
         </el-form-item>
-        <!-- 密码 -->
         <el-form-item prop="password">
           <el-input
             type="password"
@@ -20,13 +43,12 @@
             prefix-icon="iconfont icon-3702mima"
           ></el-input>
         </el-form-item>
-        <!-- 按钮 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -53,7 +75,10 @@ export default {
       // 点击登录的时候先调用validate方法验证表单内容是否有误
 
       // 发送请求进行登录
-      const { data: res } = await this.$http.post('/LoginServlet', this.$qs.stringify(this.loginForm))
+      const { data: res } = await this.$http.post(
+        '/LoginServlet',
+        this.$qs.stringify(this.loginForm)
+      )
       console.log(res)
       if (res.status !== 200) {
         return this.$message.error('登录失败:' + res.msg) // console.log("登录失败:"+res.meta.msg)
@@ -66,14 +91,16 @@ export default {
       window.sessionStorage.setItem('username', this.loginForm.username)
       console.log(this.loginForm.username)
       // 导航至/home
-      this.$router.push('/admin')
+      //   this.$router.push('/admin')
+      this.$router.replace('/admin')
     }
   }
 }
 </script>
 
 <style  scoped>
-.login_container {
+@import url(../assets/css/css.css);
+/* .login_container {
   background-color: #2b5b6b;
   height: 100%;
 }
@@ -115,5 +142,5 @@ export default {
 .btns {
   display: flex;
   justify-content: flex-end;
-}
+} */
 </style>
