@@ -20,8 +20,8 @@
         <el-menu-item index="label">标签</el-menu-item>
       </el-submenu>
       <el-row type="flex" class="row-bg" justify="end">
-        <el-menu-item index="user">Linmo</el-menu-item>
-        <el-menu-item index="logout">登出</el-menu-item>
+        <el-menu-item>{{username}}</el-menu-item>
+        <el-menu-item @click="logout()">登出</el-menu-item>
         <el-menu-item index="index">主页</el-menu-item>
       </el-row>
     </el-menu>
@@ -48,7 +48,12 @@
 <script>
 export default {
   data () {
-    return {}
+    return {
+      username: ''
+    }
+  },
+  mounted: function () {
+    this.username = window.sessionStorage.getItem('username')
   },
   methods: {
     handleSelect (key, keyPath) {
@@ -56,6 +61,13 @@ export default {
     },
     activeIndex () {
       return this.$route.path.replace('/', '')
+    },
+    logout () {
+      this.$http.get('/InvalidateServlet')
+        .then((res) => {
+          this.$router.replace('/')
+        })
+      window.sessionStorage.clear()
     }
   }
 }
